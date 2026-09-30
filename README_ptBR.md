@@ -78,7 +78,7 @@ O plugin conta com um motor de renderização vetorial próprio para visualizaç
 O Application Bundle completo do AutoCAD (`PackageContents.xml` + `Contents/`) fica armazenado na pasta `Fonts/`, exatamente no formato esperado pelo Autoloader do AutoCAD. Para compilar o instalador do Windows:
 
 1. Instale o [Inno Setup 6](https://jrsoftware.org/isinfo.php).
-2. Abra o arquivo `Install ArkZBlkCat.iss` no Inno Setup Compiler e pressione **Compile**.
+2. Abra o arquivo `Install ArkZ3DHedron.iss` no Inno Setup Compiler e pressione **Compile**.
 3. O executável de instalação é gerado na pasta `Instalador/` como `ArkZ3dhedron_v_<versao>_Setup.exe`.
 4. Ao executar o setup, o bundle é instalado em `C:\Program Files (x86)\Autodesk\ApplicationPlugins\ArkZ3dhedron.bundle` (todos os usuários) ou `%APPDATA%\Autodesk\ApplicationPlugins\ArkZ3dhedron.bundle` (somente o usuário atual), fazendo com que o plugin seja carregado automaticamente na próxima inicialização do AutoCAD.
 
@@ -155,7 +155,7 @@ ArkZ3DHedron/
 │       └── Windows/                # ArkZ3DHedron.lsp, .dcl, .cuix, .slb e a ajuda .txt
 ├── Support/                        # Arte do instalador (ícone ARK-Z e bitmaps do assistente)
 ├── Instalador/                     # Pasta de saída do instalador compilado (.exe)
-├── Install ArkZBlkCat.iss          # Script Inno Setup do instalador do Windows
+├── Install ArkZ3DHedron.iss        # Script Inno Setup do instalador do Windows
 ├── README.md                       # Documentação em inglês
 └── README_ptBR.md                  # Documentação em português (Brasil)
 ```
