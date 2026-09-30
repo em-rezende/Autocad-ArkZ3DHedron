@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArkZ3DHedron Studio · Advanced Polyhedron &amp; Geodesic Dome Generator</title>
+    <!-- Linking external stylesheet -->
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <!-- Standard header -->
+      <div style="margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem;"> 
+        <span class="badge badge-dark" style="background: #1e4a76; color: white; border: none;">ARK-Z ARQUITETURA</span>
+        <span class="badge">PARAMETRIC POLYHEDRA FOR AUTOCAD</span> 
+      </div>
+      
+      <h1>ArkZ3DHedron Studio</h1>
+      <p class="sub-header">
+        Advanced Polyhedron &amp; Geodesic Dome Generator — Version 3.2
+      </p>
+      <p style="background: transparent; border-left: none; font-style: italic;"> 
+        Based on the original code by <strong>'Petri Leskinen' (2000)</strong>. 
+        Development, updates, and 3D Wireframe support by ARK-Z Arquitetura.
+      </p>
+
+      <p class="lead-text">
+        <strong>ArkZ3DHedron Studio</strong> is an advanced parametric tool developed in 
+        <strong>AutoLISP</strong> and <strong>DCL</strong> for AutoCAD. It allows you to create, 
+        preview, and generate complex polyhedra (Platonic, Archimedean, Catalan solids) and 
+        Geodesic Domes directly within the CAD 3D environment.
+      </p>
+      
+      <!-- Main image --> 
+      <img src="image_1.png" 
+           alt="ArkZ3DHedron Studio - main dialog with Rhombicosidodecahedron preview" 
+           title="ArkZ3DHedron Studio - Main Dialog">
+      
+      <!-- Main description -->
+      <div class="note-box" style="background: #ecf3fa; border-left: 6px solid #3b82f6;">
+        <p style="background: transparent; border-left: none; margin-bottom: 0.5rem;"> 
+          The plugin features its own <strong>vector rendering engine</strong> for real-time visualization, 
+          with support for <em>hidden-line removal (backface culling)</em> and <em>colored shading</em>.
+        </p>
+        <p style="background: transparent; border-left: none; margin-bottom: 0.5rem;"> 
+          It exports geometry to multiple formats: legacy polyface meshes, modern Sub-D meshes, 
+          true 3D solids via CSG operations, and closed 3D polylines per face.
+        </p>
+        <p style="background: transparent; border-left: none;"> 
+          All settings — size, draw mode, auto-layer, edge/radius toggle, and truncation — 
+          are automatically persisted between AutoCAD sessions.
+        </p>
+      </div>
+
+      <!-- ========================================================== -->
+      <h2>🧩 Output Engines</h2>
+      <p style="font-weight: 500;">Choose how the geometry will be constructed inside the drawing:</p>
+
+      <ul class="config-list" style="list-style: none; padding-left: 0;">
+        <li><strong>Polyface Mesh (Legacy):</strong> Creates <code>PFACE</code> entities. Lightweight and compatible with older AutoCAD versions and third-party software.</li>
+        <li><strong>Sub-D Mesh (Modern):</strong> Creates native <code>MESH</code> entities. Ideal for applying mesh smoothing for organic modeling.</li>
+        <li><strong>3D Solid (CSG):</strong> Generates a real <code>3DSOLID</code> object. Starts from a solid block and applies slicing planes (<code>SLICE</code>) on the calculated faces.</li>
+        <li><strong>3D Wireframe (Edges):</strong> Creates only the wireframe, generating a closed <code>3DPOLY</code> for each face. Ideal for structural detailing, center axes, or templates.</li>
+        <li><strong>Auto-Layer by Polygon Sides:</strong> When active, automatically creates and assigns layers by polygon side count (<code>3D_POLY_3SIDES</code>, <code>3D_POLY_5SIDES</code>, etc.).</li>
+      </ul>
+
+      <!-- Options in grid -->
+      <div style="margin-top: 2rem;">
+        <h3>Available Output Engines</h3>
+        <div class="option-grid"> 
+          <div class="option-item">Polyface Mesh (Legacy)</div> 
+          <div class="option-item">Sub-D Mesh (Modern)</div>
+          <div class="option-item">3D Solid (CSG)</div> 
+          <div class="option-item">3D Wireframe (Edges)</div> 
+          <div class="option-item">Auto-Layer by Sides</div> 
+          <div class="option-item">Color Customization</div> 
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <h2>📐 Geometric Presets</h2>
+      <p style="font-weight: 500;">Built-in presets cover the most important families of convex polyhedra:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Family</th>
+            <th>Presets</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Platonic Solids</strong></td>
+            <td>Tetrahedron, Cube, Octahedron, Dodecahedron, Icosahedron.</td>
+          </tr>
+          <tr>
+            <td><strong>Archimedean Solids</strong></td>
+            <td>Cuboctahedron, Rhombicuboctahedron, Rhombicosidodecahedron, Truncated Icosahedron ("Soccer Ball").</td>
+          </tr>
+          <tr>
+            <td><strong>Catalan Solids</strong></td>
+            <td>Rhombic Dodecahedron, Rhombic Triacontahedron, Tetrakis Hexahedron.</td>
+          </tr>
+          <tr>
+            <td><strong>Geodesic Domes</strong></td>
+            <td>1V, 2V and 3V frequencies based on spherical projection.</td>
+          </tr>
+          <tr>
+            <td><strong>Custom</strong></td>
+            <td>Free assembly by defining the polygons around each vertex.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ========================================================== -->
+      <h2>🖥️ Interactive Preview</h2>
+
+      <div class="features-grid">
+        <div class="feature-item">🖱️ Rotate the model by dragging the mouse over the preview square.</div>
+        <div class="feature-item">🔭 Quick views: Top, Front, SE Iso, SW Iso.</div>
+        <div class="feature-item">🎨 Two modes: <strong>View</strong> (hidden-line wireframe) and <strong>Shade</strong> (colored faces).</div>
+        <div class="feature-item">📊 Live info: vertex count, face count, and illegal-topology warnings.</div>
+      </div>
+
+      <!-- Advanced mode image -->
+      <img src="image_2.png" 
+           alt="ArkZ3DHedron Studio - Advanced dialog with Truncated Icosahedron preview" 
+           title="ArkZ3DHedron Studio - Advanced Mode">
+
+      <!-- ========================================================== -->
+      <h2>⚙️ Advanced Mode</h2>
+      <p style="font-weight: 500;">Click the <strong>Advanced &gt;</strong> button to access the special controls:</p>
+
+      <div class="purge-section">
+        <div class="purge-title">Special Operations</div>
+        <ul class="config-list" style="list-style: none; padding-left: 0;">
+          <li><strong>Triangulation:</strong> Recursively subdivides faces into triangles (levels 1, 2, or 3).</li>
+          <li><strong>Truncation:</strong> Slider from 0 to 50 (0.0 to 1.0) to apply geometric truncation and dualization.</li>
+          <li><strong>Colors:</strong> Assign specific ACI colors per polygon type for display in shaded mode.</li>
+        </ul>
+      </div>
+
+      <!-- Note about truncation -->
+      <div style="background: #eaf2fb; border-radius: 18px; padding: 1.2rem 1.8rem; margin: 2rem 0;"> 
+        <span class="badge badge-dark" style="background: #1e4a76; color: white; border: none; font-size: 0.9rem;">⚙️ Truncation Range</span>
+        <p style="background: transparent; border-left: none; margin: 0.5rem 0 0 0;"> 
+          At <strong>0.0</strong> no truncation is applied. Between <strong>0.0 and 0.5</strong> vertices and edges are progressively cut. 
+          At <strong>0.5</strong> a full rectification is applied. Above <strong>0.5</strong> dualization is applied, producing the dual polyhedron.
+        </p>
+      </div>
+
+      <!-- ========================================================== -->
+      <h2>🛠️ Installation</h2>
+      <ul class="config-list" style="list-style: none; padding-left: 0;">
+        <li><strong>1.</strong> Download the project files: <code>ArkZ3DHedron.lsp</code>, <code>ArkZ3DHedron.dcl</code>, and <code>ArkZ3DHedron.txt</code>.</li>
+        <li><strong>2.</strong> Copy all files to a folder included in the AutoCAD Support File Search Path.</li>
+        <li><strong>3.</strong> In AutoCAD, type the <code>APPLOAD</code> command.</li>
+        <li><strong>4.</strong> Locate and select <code>ArkZ3DHedron.lsp</code> and click <strong>Load</strong>.</li>
+        <li><strong>5.</strong> Optionally add the command to a startup suite or <code>acaddoc.lsp</code> for automatic loading.</li>
+      </ul>
+
+      <!-- ========================================================== -->
+      <h2>🚀 How to Use</h2>
+      <p>Type the main command at the AutoCAD command line:</p>
+      <div class="action-row">
+        <span class="action-button">ArkZ3DHedron</span>
+      </div>
+      <p>
+        The dialog interface (DCL) will be displayed, allowing you to configure parameters and 
+        preview the polyhedron before generation.
+      </p>
+
+      <!-- ========================================================== -->
+      <h2>📖 Interface Guide</h2>
+
+      <h3>Geometry Setup</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Size</strong></td>
+            <td>Defines the base size of the geometry. Can be typed or picked on screen using the <code>Size &lt;</code> button.</td>
+          </tr>
+          <tr>
+            <td><strong>Edge / Radius</strong></td>
+            <td>Toggles whether the size value refers to the <strong>polygon edge</strong> or the <strong>circumscribed sphere radius</strong>.</td>
+          </tr>
+          <tr>
+            <td><strong>Center Point (X, Y, Z)</strong></td>
+            <td>Defines the 3D insertion coordinate for the polyhedron center. Can be picked on screen using the <code>Center point &lt;</code> button.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Presets and Customization</h3>
+      <p>
+        Select a pre-configured polyhedron from the <strong>Presets</strong> list, or build your own 
+        topology by filling the <strong>Polygons Around Vertex</strong> box with the side counts of the 
+        polygons meeting at each vertex (e.g., <code>3, 3, 3</code> for a Tetrahedron; 
+        <code>3, 4, 3, 4</code> for a Cuboctahedron).
+      </p>
+
+      <!-- ========================================================== -->
+      <h2>📁 Project File Structure</h2>
+      <div class="option-grid">
+        <div class="option-item">ArkZ3DHedron.lsp — AutoLISP source code</div>
+        <div class="option-item">ArkZ3DHedron.dcl — Dialog interface definition</div>
+        <div class="option-item">ArkZ3DHedron.txt — Help text file</div>
+        <div class="option-item">ArkZ3DHedron.slb — Optional slide library</div>
+        <div class="option-item">README.md — Project documentation</div>
+        <div class="option-item">Fonts/Contents/Resources/ — Screenshot images</div>
+      </div>
+
+      <!-- ========================================================== -->
+      <h2>📐 Compatibility</h2>
+      <ul class="config-list" style="list-style: none; padding-left: 0;">
+        <li><strong>Supported Software:</strong> AutoCAD 2012 through the most recent versions (Windows).</li>
+        <li><strong>Native Units:</strong> Automatic conversion and reading of the <code>INSUNITS</code> variable (mm, cm, m, inches, feet).</li>
+        <li><strong>Dependencies:</strong> No external libraries required (uses native AutoLISP/Visual LISP and DCL libraries).</li>
+      </ul>
+
+      <!-- ========================================================== -->
+      <h2>⚠️ Known Limitations</h2>
+
+      <div class="warning-box">
+        <strong>Topology:</strong> Only convex polyhedra can be generated. Non-convex configurations 
+        are rejected and flagged as "Illegal polyhedron". The sum of internal angles around each vertex 
+        must be strictly less than 360 degrees. Only regular polygons are supported.
+      </div>
+
+      <div class="warning-box">
+        <strong>Geometry:</strong> The 3D Solid (CSG) engine is the most computationally expensive and 
+        may produce many separate fragments on complex polyhedra. Sub-D Mesh requires AutoCAD 2011 or later. 
+        Very high triangulation counts may slow the preview and generation significantly.
+      </div>
+
+      <div class="warning-box">
+        <strong>Preview:</strong> The preview uses a custom raster-based renderer with painter's algorithm. 
+        Overlapping faces at extreme viewing angles may produce minor sorting artifacts.
+      </div>
+
+      <div class="danger-box">
+        <strong>Files:</strong> The Help dialog requires <code>ArkZ3DHedron.txt</code> in the support paths. 
+        The DCL file must be in the support paths. Missing files trigger an alert and the program exits silently.
+      </div>
+
+      <!-- ========================================================== -->
+      <h2>❓ Troubleshooting</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Solution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Command <code>ArkZ3DHedron</code> not recognized.</td>
+            <td>Run <code>APPLOAD</code> and load <code>ArkZ3DHedron.lsp</code>. Confirm the success message.</td>
+          </tr>
+          <tr>
+            <td>"File 'ArkZ3DHedron.dcl' was not found..."</td>
+            <td>Copy the DCL file to a folder in the AutoCAD support paths.</td>
+          </tr>
+          <tr>
+            <td>"Could not load the ArkZ3DHedron.dcl dialog box."</td>
+            <td>Verify that the DCL file is complete and unmodified.</td>
+          </tr>
+          <tr>
+            <td>The Help dialog does not open.</td>
+            <td>Ensure <code>ArkZ3DHedron.txt</code> is present in the support paths.</td>
+          </tr>
+          <tr>
+            <td>"Illegal polyhedron" is displayed.</td>
+            <td>Check the angle sum around the vertex. It must be strictly less than 360 degrees.</td>
+          </tr>
+          <tr>
+            <td>Logo and separator images do not appear.</td>
+            <td>The <code>ArkZ3DHedron.slb</code> slide library must be present.</td>
+          </tr>
+          <tr>
+            <td>Generated polyhedron appears at the wrong scale.</td>
+            <td>Check the Edge/Radius toggle setting.</td>
+          </tr>
+          <tr>
+            <td>3D Solid generation is very slow.</td>
+            <td>Use Polyface Mesh, Sub-D Mesh, or 3D Wireframe for complex shapes.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ========================================================== -->
+      <h2>📄 License and Usage</h2>
+
+      <p>
+        Based on the original <code>3Dhedron.lsp</code> routine by Petri Leskinen (2000). 
+        Code released for free use and modification in architectural, engineering, and 3D modeling projects.
+      </p>
+
+      <div class="note-box" style="background: #ecf3fa; border-left: 6px solid #1e4a76;">
+        <p style="background: transparent; border-left: none; margin-bottom: 0.5rem;">
+          <strong>License:</strong> GNU GPLv3
+        </p>
+        <p style="background: transparent; border-left: none; margin-bottom: 0.5rem;">
+          <strong>Copyright (C) 2026 Ezequiel M Rezende</strong>
+        </p>
+        <p style="background: transparent; border-left: none;">
+          This program is free software: you can redistribute it and/or modify it under the terms of 
+          the GNU General Public License as published by the Free Software Foundation, either version 3 
+          of the License, or (at your option) any later version.
+        </p>
+      </div>
+
+      <!-- Help image -->
+      <img src="image_3.png" 
+           alt="ArkZ3DHedron Studio - Help dialog" 
+           title="ArkZ3DHedron Studio - Help Dialog">
+
+      <!-- ========================================================== -->
+      <!-- Soft footer -->
+      <hr>
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; color: #4f6b89;"> 
+        <span>© ARK-Z ARQUITETURA — Parametric polyhedra for AutoCAD</span> 
+        <span class="badge">ArkZ3DHedron v3.2</span> 
+      </div>
+
+      <div class="footer-tip">
+        <h3>Tip</h3>
+        <p style="background: transparent; border-left: none; color: #e1f0fa;">
+          The preview responds to mouse drag. For the best experience, use the <strong>SE Iso</strong> 
+          and <strong>SW Iso</strong> buttons first, then fine-tune the orientation interactively.
+          Project website: <strong>https://em-rezende.github.io/</strong>
+        </p>
+      </div>
+
+      <p style="opacity: 0.3; text-align: right; margin-top: 1rem;">.</p>
+    </div>
+  </body>
+</html>

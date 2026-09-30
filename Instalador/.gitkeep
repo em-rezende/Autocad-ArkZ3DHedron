@@ -1,0 +1,3 @@
+# Pasta de saida do instalador (Inno Setup / OutputDir do Install ArkZBlkCat.iss).
+# Mantida no repositorio apenas para preservar a estrutura de pastas.
+# Os arquivos .exe gerados aqui NAO sao versionados (ver .gitignore).

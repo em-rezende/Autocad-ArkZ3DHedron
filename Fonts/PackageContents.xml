@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ApplicationPackage
+    SchemaVersion="1.0"
+    AutodeskProduct="AutoCAD"
+    ProductType="Application"
+    Name="ArkZ 3D Hedron"
+    AppVersion="1.0.0"
+    FriendlyVersion="1.0.0"
+    Description="ArkZ 3D Hedron"
+    Author="Ezequiel M. Rezende"
+    Icon="./Contents/Resources/Ark-Z.ico"
+    AppNameSpace="appstore.exchange.autodesk.com"
+    HelpFile="./Contents/Resources/Index.htm"
+    ProductCode="{6C0E608A-3EAA-4F09-8CB2-77A098B13CC2}"
+    UpgradeCode=""
+    SupportedLocales="Enu"
+    OnlineDocumentation="https://arkz.duckdns.org/"
+>
+    <CompanyDetails
+        Name="Ark-Z Arquitetura"
+        Email="emrezende@gmail.com"
+        Url="https://arkz.duckdns.org/"
+        Phone=""
+    />
+    
+    <!-- Apenas UMA seção Components -->
+    <Components Description="ArkZ 3D Hedron">
+        <RuntimeRequirements
+            SupportPath="./Contents/;./Contents/Windows/"
+            OS="Win32|Win64"
+            Platform="AutoCAD*|AutoCAD"
+            SeriesMin="R19.0"
+            SeriesMax="R26.0"
+        />
+        
+        <!-- Componente para o CUIX (menu/ribbon) -->
+        <ComponentEntry
+            AppName="ArkZ 3D Hedron Ribbon"
+            Version="1.0.0"
+            ModuleName="./Contents/Windows/ArkZ3DHedron.cuix"
+            AppDescription="ArkZ3DHedron - Generate complex polyhedra (Platonic, Archimedean, Catalan solids) and Geodesic Domes"
+            PerDocument="False"
+            LoadOnAutoCADStartup="True"
+        />
+        
+        <!-- Componente para o LSP (carrega automaticamente) -->
+        <ComponentEntry
+            AppName="ArkZ 3D Hedron LSP"
+            Version="1.0.0"
+            ModuleName="./Contents/Windows/ArkZ3DHedron.lsp"
+            AppDescription="ArkZ 3D Hedron"
+            LoadOnAutoCADStartup="True"
+        />
+        
+        <!-- Comando principal - Note: mantive ARKZREDEF em maiúsculas para consistência -->
+        <Command Local="ArkZ3DHedron" Group="Ark-Z" Global="ArkZ3DHedron">
+            <ComponentEntry ModuleName="./Contents/Windows/ArkZ3DHedron.lsp"/>
+        </Command>
+        
+    </Components>
+</ApplicationPackage>

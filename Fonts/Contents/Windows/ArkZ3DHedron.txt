@@ -1,0 +1,154 @@
+ARK-Z ARQUITETURA - by Ezequiel M Rezende
+-----------------------------------------------------------
+ArkZ3DHedron - Advanced Polyhedron and Geodesic Dome Generator
+-----------------------------------------------------------
+TABLE OF CONTENTS
+-----------------------------------------------------------
+1. Overview
+2. Credits and Origin
+3. Installation
+4. Quick Start
+5. Interface Guide
+  5.1 Geometry Setup
+  5.2 Output Engine
+  5.3 Presets and Customization
+  5.4 Interactive Preview
+  5.5 Advanced Mode
+6. Output Engines in Detail
+7. Geometric Presets Reference
+  8. Advanced Operations
+  8.1 Truncation
+  8.2 Triangulation
+  8.3 Color Customization
+  8.4 Auto-Layer System
+9. Settings Persistence
+10. Compatibility
+11. Known Limitations
+12. Troubleshooting
+13. License and Usage
+-----------------------------------------------------------
+1. OVERVIEW
+-----------------------------------------------------------
+ArkZ3DHedron Studio is an advanced parametric tool developed in AutoLISP and DCL for AutoCAD. It allows you to create, preview, and generate complex polyhedra (Platonic, Archimedean, Catalan solids) and Geodesic Domes directly within the CAD 3D environment. The plugin features its own vector rendering engine for real-time visualization, with support for hidden-line removal (backface culling) and colored shading. It exports geometry to multiple formats, including legacy polyface meshes, modern Sub-D meshes, true 3D solids via CSG operations, and closed 3D polylines per face.
+-----------------------------------------------------------
+2. CREDITS AND ORIGIN
+-----------------------------------------------------------
+Original Author: Petri Leskinen
+Creation Date: 12/8/2000 in Espoo, Finland
+Original Email: leskinen.petri@luukku.com
+Development, Updates, and 3D Wireframe Support (v3.2): ARK-Z Arquitetura
+Maintainer: Ezequiel M Rezende
+Project Website: https://em-rezende.github.io/
+-----------------------------------------------------------
+3. INSTALLATION
+-----------------------------------------------------------
+1. Download the project files: ArkZ3DHedron.lsp, ArkZ3DHedron.dcl, and ArkZ3DHedron.txt (this help file).
+2. Copy all files to a folder included in the AutoCAD Support File Search Path, or keep them in the project's working folder.
+3. In AutoCAD, type the APPLOAD command.
+4. Locate and select the ArkZ3DHedron.lsp file and click Load.
+5. Optionally, add the command to a startup suite or acaddoc.lsp for automatic loading in every session.
+-----------------------------------------------------------
+4. QUICK START
+-----------------------------------------------------------
+Type the main command at the AutoCAD command line: ArkZ3DHedron
+The dialog interface (DCL) will be displayed, allowing you to configure parameters and preview the polyhedron before generation.
+Basic workflow: (a) Choose a preset from the Presets list (or build a custom topology using the Polygons Around Vertex fields). (b) Set the Size and toggle between Edge and Radius mode. (c) Pick or type the Center Point (X, Y, Z) for insertion. (d) Choose an Output Engine. (e) Rotate the preview to inspect the model. (f) Click OK to generate the polyhedron in the drawing.
+-----------------------------------------------------------
+5. INTERFACE GUIDE
+-----------------------------------------------------------
+5.1 GEOMETRY SETUP
+-----------------------------------------------------------
+Size: Defines the base size of the geometry. Can be typed directly into the edit box, or picked from the screen using the "Size <" button.
+Edge / Radius: Toggles whether the size value refers to the polygon edge length or the circumscribed sphere radius.
+Center Point (X, Y, Z): Defines the 3D insertion coordinate for the polyhedron center. Can be typed manually or picked on screen using the "Center point <" button.
+Unit Label: Displays the current drawing unit, automatically read from the INSUNITS system variable (mm, cm, m, inches, feet, etc.).
+5.2 OUTPUT ENGINE
+-----------------------------------------------------------
+Choose how the geometry will be constructed inside the drawing. See Section 6 for detailed descriptions of each engine. Available options: Polyface Mesh (Legacy), Sub-D Mesh (Modern), 3D Solid (CSG), and 3D Wireframe (Edges).
+Auto-Layer by Polygon Sides: When active, automatically creates and assigns layers named according to the polygon's side count (e.g., 3D_POLY_3SIDES, 3D_POLY_5SIDES). Each layer receives a standardized color.
+5.3 PRESETS AND CUSTOMIZATION
+-----------------------------------------------------------
+Select a pre-configured polyhedron from the Presets list, or build your own topology by filling the Polygons Around Vertex box with the side counts of the polygons meeting at each vertex.
+Examples: Tetrahedron: 3, 3, 3. Cube: 4, 4, 4. Octahedron: 3, 3, 3, 3. Dodecahedron: 5, 5, 5. Icosahedron: 3, 3, 3, 3, 3. Cuboctahedron: 3, 4, 3, 4. Rhombicuboctahedron: 3, 4, 4, 4.
+Any combination of polygons whose internal angles sum to less than 360 degrees around a vertex will produce a valid convex polyhedron, provided the topology closes correctly.
+5.4 INTERACTIVE PREVIEW
+-----------------------------------------------------------
+Mouse Drag: Click and drag over the preview square to dynamically rotate the model in 3D. The horizontal drag controls the Y-axis rotation, and the vertical drag controls the X-axis rotation.
+View Buttons: Top / Front / SE Iso / SW Iso provide quick view alignment.
+View / Shade: View displays the structure as lines with back-face hidden-line removal (wireframe with occlusion). Shade fills the faces with the assigned colors, using painter's algorithm for depth sorting.
+Info Tiles: "Vertices : n" displays the current vertex count. "Faces : n" displays the current face count. "Illegal polyhedron" is displayed when the current topology cannot form a valid convex solid.
+5.5 ADVANCED MODE
+-----------------------------------------------------------
+Click the "Advanced >" button at the bottom of the window to access the special controls: Triangulation popup, Truncation edit box and slider, and the Colors panel for per-polygon-type color assignment. Click "< Simple" to return to the basic dialog.
+-----------------------------------------------------------
+6. OUTPUT ENGINES IN DETAIL
+-----------------------------------------------------------
+POLYFACE MESH (LEGACY): Creates PFACE entities. Each face is generated as a separate polyface. Lightweight and compatible with older AutoCAD versions and third-party software. Faces with more than 4 sides are supported natively by the PFACE format.
+SUB-D MESH (MODERN): Creates native MESH entities. Ideal for those who intend to apply mesh smoothing for organic modeling. Triangles and quadrilaterals are created directly; faces with more than 4 sides automatically fall back to polyface mesh rendering.
+3D SOLID (CSG): Generates a real 3DSOLID object. Starts from a bounding box solid and applies slicing planes (SLICE) on each calculated face plane, with the center point used as the keep side. This produces a true solid approximation of the polyhedron. This engine is the most computationally expensive and may produce many separate solid fragments for complex polyhedra.
+3D WIREFRAME (EDGES): Creates only the wireframe, generating a closed 3DPOLY for each face. Ideal for structural detailing, center axes, or templates. All edges are drawn regardless of visibility.
+AUTO-LAYER BY POLYGON SIDES: When active, creates and assigns layers named by the number of polygon sides. Standard colors are: 3 sides = Red, 4 sides = Yellow, 5 sides = Green, 6 sides = Cyan, 8 sides = Blue, 10 sides = Magenta, others = White.
+-----------------------------------------------------------
+7. GEOMETRIC PRESETS REFERENCE
+-----------------------------------------------------------
+PLATONIC SOLIDS: Tetrahedron (4 triangular faces), Cube or Hexahedron (6 square faces), Octahedron (8 triangular faces), Dodecahedron (12 pentagonal faces), Icosahedron (20 triangular faces).
+ARCHIMEDEAN SOLIDS: Cuboctahedron (8 triangles + 6 squares), Rhombicuboctahedron (8 triangles + 18 squares), Rhombicosidodecahedron (20 triangles + 30 squares + 12 pentagons), Truncated Icosahedron (12 pentagons + 20 hexagons, also known as Soccer Ball or Football).
+CATALAN SOLIDS (duals of Archimedean solids): Rhombic Dodecahedron (12 rhombic faces), Rhombic Triacontahedron (30 rhombic faces), Tetrakis Hexahedron (24 isosceles triangle faces).
+GEODESIC DOMES: Dome 1V uses the base icosahedron (20 faces). Dome 2V applies one level of subdivision (80 faces). Dome 3V applies two levels of subdivision (320 faces). All dome vertices are normalized to the unit sphere.
+-----------------------------------------------------------
+8. ADVANCED OPERATIONS
+-----------------------------------------------------------
+8.1 TRUNCATION
+-----------------------------------------------------------
+The truncation slider (0 to 50) and the truncation edit box (0.0 to 1.0) control the amount of geometric truncation applied to the polyhedron before generation. At 0.0, no truncation is applied. Between 0.0 and 0.5, vertices and edges are progressively cut, producing truncated forms. At 0.5, a full rectification is applied (the dual's vertices become the original's edge midpoints). Above 0.5, dualization is applied, producing the dual polyhedron at the extreme. Truncation is recalculated live and updates the preview.
+8.2 TRIANGULATION
+-----------------------------------------------------------
+The Triangulation popup applies recursive subdivision to the current faces. Each pass adds one level of subdivision by inserting midpoints on each edge and normalizing them to the circumsphere. Available options: None (no subdivision), 1 (one level, useful for geodesic dome generation), 2 (two levels), and 3 (three levels).
+8.3 COLOR CUSTOMIZATION
+-----------------------------------------------------------
+Available in Advanced mode. The Colors panel lists all distinct polygon types present in the current polyhedron and allows assigning a specific ACI color or color name per type. The edit box accepts a color name or ACI index. The image button opens the AutoCAD color picker. Both "bylayer" and "byblock" are accepted. The assigned colors are used in the Shade preview mode and, when Auto-Layer is disabled, are also applied to the generated geometry.
+8.4 AUTO-LAYER SYSTEM
+-----------------------------------------------------------
+When enabled, each generated face is placed on a layer named 3D_POLY_<n>SIDES, where <n> is the number of sides of the polygon. Layers are created if they do not exist, and each is assigned a standardized color based on the polygon type. This is useful for turning visibility on and off by face type, or for filtering the drawing by polygon count.
+-----------------------------------------------------------
+9. SETTINGS PERSISTENCE
+-----------------------------------------------------------
+ArkZ3DHedron automatically saves the following settings to the Windows registry between sessions: size value, draw mode (Output Engine), Auto-Layer toggle state, Edge/Radius toggle state, and truncation value. These are stored under the following registry keys: ARKZ_3DH_SIZE, ARKZ_3DH_MODE, ARKZ_3DH_AUTOLAYER, ARKZ_3DH_EDGE, and ARKZ_3DH_TRUNC. No additional configuration files are needed.
+-----------------------------------------------------------
+10. COMPATIBILITY
+-----------------------------------------------------------
+Supported Software: AutoCAD 2012 through the most recent versions (Windows). Earlier versions may work but have not been tested.
+Native Units: Automatic conversion and reading of the INSUNITS system variable. Supported values include mm, cm, dm, m, km, in, ft, yd, mils, and micro-inches.
+Dependencies: No external libraries required. Uses only native AutoLISP, Visual LISP, and DCL libraries.
+File Requirements: ArkZ3DHedron.lsp, ArkZ3DHedron.dcl, ArkZ3DHedron.txt (for the Help dialog), and ArkZ3DHedron.slb (optional, for logo and separator slides).
+-----------------------------------------------------------
+11. KNOWN LIMITATIONS
+-----------------------------------------------------------
+TOPOLOGY LIMITATIONS: Only convex polyhedra can be generated. Non-convex configurations will be rejected and flagged as "Illegal polyhedron". The sum of internal angles of the polygons around each vertex must be strictly less than 360 degrees. Vertex figures with more than 5 polygons may not close correctly; the engine will report an error if the topology is inconsistent. Only regular polygons are supported; irregular faces cannot be generated.
+GEOMETRY LIMITATIONS: The 3D Solid (CSG) engine is the most computationally expensive and may produce many separate fragments on complex polyhedra. For best results, use it on simple convex shapes. Sub-D Mesh (Modern) requires AutoCAD 2011 or later for the MESH command. For earlier versions, use Polyface Mesh or 3D Wireframe. Very high triangulation counts on complex polyhedra may slow the preview and generation significantly.
+PREVIEW LIMITATIONS: The preview uses a custom raster-based renderer with painter's algorithm. Overlapping faces at extreme viewing angles may produce minor sorting artifacts. Backface culling is performed by 2D cross-product sign in screen space, which is robust but can produce edge cases for very thin faces.
+FILE LIMITATIONS: The Help dialog requires the ArkZ3DHedron.txt file to be in the AutoCAD support paths. If it is missing, the program will alert the user and return silently. The DCL file must be in the support paths. If it is missing, the program will alert the user and exit.
+-----------------------------------------------------------
+12. TROUBLESHOOTING
+-----------------------------------------------------------
+Q: The command ArkZ3DHedron is not recognized. A: Run APPLOAD and load ArkZ3DHedron.lsp. Confirm the message "ArkZ3DHedron v3.5 loaded successfully!" appears in the command line.
+Q: "File 'ArkZ3DHedron.dcl' was not found..." A: Copy ArkZ3DHedron.dcl to a folder in the AutoCAD support paths (Options > Files > Support File Search Path).
+Q: "Could not load the ArkZ3DHedron.dcl dialog box." A: The DCL file is present but does not contain the expected dialog definitions. Verify that you have the complete and unmodified ArkZ3DHedron.dcl file.
+Q: The Help dialog does not open. A: Ensure that ArkZ3DHedron.txt is present in the support paths. If it is missing, an alert will be displayed and the help dialog will be skipped.
+Q: "Illegal polyhedron" is displayed in the preview. A: The current polygon configuration cannot form a valid convex polyhedron. Check the angle sum around the vertex; it must be strictly less than 360 degrees. Reduce the number of polygons or their side counts.
+Q: The logo and separator images do not appear. A: The ArkZ3DHedron.slb slide library must be present in the support paths. The program works without it, but the header and separator tiles will be empty.
+Q: The generated polyhedron appears at the wrong scale. A: Check that Edge/Radius is set correctly. Edge mode uses the polygon edge length as the size unit; Radius mode uses the circumscribed sphere radius.
+Q: The 3D Solid generation is very slow. A: The CSG engine performs many SLICE operations. For complex polyhedra such as 3V geodesic domes, use Polyface Mesh, Sub-D Mesh, or 3D Wireframe instead.
+Q: Settings are not preserved between sessions. A: The registry keys are written under HKEY_CURRENT_USER\Software\Autodesk\AutoCAD\<version>\<profile>. If this key is not writable due to a restricted profile, settings will not persist.
+-----------------------------------------------------------
+13. LICENSE AND USAGE
+-----------------------------------------------------------
+Based on the original 3Dhedron.lsp routine by Petri Leskinen (2000). Code released for free use and modification in architectural, engineering, and 3D modeling projects.
+License: GNU GPLv3. Copyright (C) 2026 Ezequiel M Rezende.
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License along with this program. If not, see: https://www.gnu.org/licenses/
+Project Website: https://em-rezende.github.io/
+-----------------------------------------------------------
+END OF FILE
+-----------------------------------------------------------
